@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const path = require('node:path');
+const path = require('path');
 
 const contactsPath = path.resolve(__dirname, 'db/contacts.json');
 
@@ -12,13 +12,48 @@ async function listContacts() {
     }
 }
 
-function getContactById(contactId) {}
+async function getContactById(contactId) {
+    try {
+        const data = await listContacts();
+        const requiredContact = data.find((contact) => contact.id === contactId);
+        console.log(requiredContact);
+        return requiredContact;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-function removeContact(contactId) {}
 
-function addContact(name, email, phone) {}
+async function addContact(name, email, phone) {
+    try {
+        const contact = { id, name, email, phone };
+        const data = await listContacts();
+        data.push(contact);
+        await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
+        console.log(contact);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+async function removeContact(contactId) {
+    try {
+        const data = await listContacts();
+        const removedContact = data.filter((contact) => contact.id !== contactId);
+        await fs.writeFile(contactsPath, JSON.stringify(removedContact, null, 2));
+        console.log(`${contactId} has been removed`);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 
 
 module.exports = {
     listContacts,
+    getContactById,
+    addContact,
+    removeContact,
 };
