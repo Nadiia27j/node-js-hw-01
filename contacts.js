@@ -1,7 +1,11 @@
 const fs = require('fs').promises;
 const path = require('path');
 
+const { v4: uuidv4 } = require('uuid');
+
 const contactsPath = path.resolve(__dirname, 'db/contacts.json');
+
+const id = uuidv4();
 
 async function listContacts() {
     try {
